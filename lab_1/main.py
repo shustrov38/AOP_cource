@@ -17,17 +17,19 @@ def unit_tests() -> None:
         ('qwerty', 'wer', 1),
         ('qwerty', 'ert', 2),
         ('qwerty', 'rty', 3),
+        ('bcaa', 'caa', 1),
+        ('bcaa', 'aa', 2),
     ]
 
     for i, (text, pattern, answer_index) in enumerate(testcases):
         print(f'TESTCASE {i:#>2}: {text=} {pattern=}')
         for module in modules:
             index, comparisons = module.search(text, pattern)
-            if index != answer_index:
-                print(f'    ### ERROR: wrong index substring index. {answer_index} expected. ###')
             print(f'{module.__name__:-<35}')
-            print(f'     substring index    : {index:5}')
-            print(f'     comparinsons count : {comparisons:5}')
+            if index != answer_index:
+                print(f'    ### ERROR: wrong index substring index. {answer_index} expected.')
+            print(f'    substring index    : {index:5}')
+            print(f'    comparinsons count : {comparisons:5}')
         print()
 
 
@@ -79,8 +81,8 @@ def benchmark(module, name: str, num: int, iters: int = 100) -> None:
     print(text_filename, module.__name__, comparisons, mean_time)
 
 if __name__ == '__main__':
-    # aho_corasick_unit_tests()
-    # unit_tests()
+    aho_corasick_unit_tests()
+    unit_tests()
     
     modules = [naive, rabin_karp, boyer_moore, knuth_moris_pratt, aho_corasick]
     benchmark_names = ['bad', 'good']

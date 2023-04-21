@@ -22,7 +22,7 @@ def search(text: str, pattern: str) -> Tuple[int, int]:
         for j in range(pattern_size - 1, -1, -1):
             comparisons_count += 1
             if text[i + j] != pattern[j]:
-                i += shift_distance[ord(text[i + j])]
+                i += shift_distance[ord(text[pattern_size - 1 + i])]
                 founded = False
                 break
         if founded:
