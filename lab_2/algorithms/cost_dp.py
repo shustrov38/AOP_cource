@@ -1,7 +1,7 @@
 from typing import List
 import scipy
 
-def solve(capacity: int, items_cost: List[int], items_weights: List[int]):
+def solve(capacity: int, items_weights: List[int], items_cost: List[int]):
     comparisons_count = 0
     items_size = len(items_cost)
     C = sum(items_cost)
@@ -21,9 +21,10 @@ def solve(capacity: int, items_cost: List[int], items_weights: List[int]):
 
 
     items = [0 for i in range(items_size)]
-    result = 0
+    result_weight = 0
 
     def get_items(k, s):
+        nonlocal result_weight
         nonlocal comparisons_count
         comparisons_count += 1
         
@@ -35,14 +36,14 @@ def solve(capacity: int, items_cost: List[int], items_weights: List[int]):
         else:
             get_items(k - 1, s - items_cost[k - 1])
             items[k - 1] = 1
-            result += items_weights[k - 1]
+            result_weight += items_weights[k - 1]
 
-    best_c = -1
+    cost_answer = -1
     for i in range(C, -1, -1):
         comparisons_count += 1
         if dp[items_size][i] < capacity + 1:
-            best_c = i
+            cost_answer = i
             break
-    get_items(items_size, best_c)
+    get_items(items_size, cost_answer)
 
-    return best_c, result, items, comparisons_count
+    return cost_answer, result_weight, items, comparisons_count

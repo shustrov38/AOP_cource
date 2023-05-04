@@ -7,24 +7,29 @@ import algorithms.cost_dp as cost_dp
 
 def unit_tests() -> None:
     print('UNIT TESTS:', end='\n\n')
-    
-    """
-    TODO
-    
-    modules = [weights_dp, cost_dp]
-    testcases = [    ]
 
-    for i, (text, pattern, answer_index) in enumerate(testcases):
-        print(f'TESTCASE {i:#>2}: {text=} {pattern=}')
+    modules = [weights_dp, cost_dp]
+
+    #TODO MORE CASES    
+    #testcases with dict
+    #testcases = [
+    #    {'capacity': 6, 'weights': [2, 10, 3, 1], 'cost': [3, 5, 4, 2], 'ans': 9}
+    #]
+    
+    testcases = [
+        [[6], [2, 10, 3, 1], [3, 5, 4, 2], [9]],
+        [[8], [3, 4, 5, 8, 9], [1, 6, 4, 7, 6], [7]]
+    ]
+
+    for i, (capacity, weights, cost, true_res) in enumerate(testcases):
+        print(f'TESTCASE {i:#>2}: {capacity=}')
         for module in modules:
-            index, comparisons = module.search(text, pattern)
+            ans, res_weights, res_items, comparisons = module.solve(capacity[0], weights, cost)
             print(f'{module.__name__:-<35}')
-            if index != answer_index:
-                print(f'    ### ERROR: wrong index substring index. {answer_index} expected.')
-            print(f'    substring index    : {index:5}')
+            if true_res[0] != ans:
+                print(f'    ### ERROR: wrong answer {ans}. {true_res[0]} expected.')
             print(f'    comparinsons count : {comparisons:5}')
         print()
-    """ 
     
 
 
@@ -63,13 +68,12 @@ def benchmark(module, name: str, iters: int = 100) -> None:
     print(name, module.__name__, ans, comparisons, mean_time)
 
 if __name__ == '__main__':
-    aho_corasick_unit_tests()
     unit_tests()
     
-    modules = [weights_dp, cost_dp]
-    benchmark_names = ['p01', 'p02', 'p03', 'p04', 'p05', 'p06']
+    #modules = [weights_dp, cost_dp]
+    #benchmark_names = ['p01', 'p02', 'p03', 'p04', 'p05', 'p06']
 
-    for module in modules:
-        for benchmark_name in benchmark_names:
-            benchmark(module, benchmark_name)
-        print()
+    #for module in modules:
+    #    for benchmark_name in benchmark_names:
+    #        benchmark(module, benchmark_name)
+    #    print()
