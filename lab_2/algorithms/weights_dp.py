@@ -1,12 +1,11 @@
 from typing import List, Tuple
 
-
 def get_items(*args):
     k, s, result_weight, comparisons_count, dp, items_weights, items = args
     comparisons_count += 1
 
     if dp[k][s] == 0:
-        return
+        return result_weight, comparisons_count
     comparisons_count += 1
     if dp[k - 1][s] == dp[k][s]:
         get_items(k - 1, s, result_weight, comparisons_count,

@@ -3,6 +3,7 @@ from pathlib import Path
 import algorithms.weights_dp as weights_dp
 import algorithms.cost_dp as cost_dp
 import algorithms.approx2 as approx2
+import algorithms.lp as lp
 
 
 BENCHMARKS_PATH = Path('./lab_2') / 'benchmarks'
@@ -18,15 +19,15 @@ def benchmark(module, name: str, iters: int = 100) -> None:
     with open(BENCHMARKS_PATH / (name + "_c.txt"), 'r', encoding='utf8') as text_file:
         capacity = int(text_file.read())
 
-    with open(BENCHMARKS_PATH / (name + "_p.txt"), 'r', encoding='utf8') as pattern_file:
+    with open(BENCHMARKS_PATH / (name + "_w.txt"), 'r', encoding='utf8') as pattern_file:
         weights = pattern_file.read()
         weights = list(map(int, weights.split()))
 
-    with open(BENCHMARKS_PATH / (name + "_s.txt"), 'r', encoding='utf8') as pattern_file:
+    with open(BENCHMARKS_PATH / (name + "_p.txt"), 'r', encoding='utf8') as pattern_file:
         cost = pattern_file.read()
         cost = list(map(int, cost.split()))
 
-    with open(BENCHMARKS_PATH / (name + "_w.txt"), 'r', encoding='utf8') as pattern_file:
+    with open(BENCHMARKS_PATH / (name + "_s.txt"), 'r', encoding='utf8') as pattern_file:
         optimal = pattern_file.read()
         optimal = list(map(int, optimal.split()))
 
@@ -44,12 +45,12 @@ def benchmark(module, name: str, iters: int = 100) -> None:
         time_sum += end_time - start_time
     mean_time = time_sum / iters
 
-    print(name, module.__name__, ans, comparisons, mean_time)
+    print(name, module.__name__, res_items, comparisons, mean_time)
 
 
 if __name__ == '__main__':
 
-    modules = [weights_dp, cost_dp, approx2]
+    modules = [weights_dp, cost_dp, approx2, lp]
     benchmark_names = ['p01', 'p02', 'p03', 'p04', 'p05', 'p06']
 
     for module in modules:
