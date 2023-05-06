@@ -16,7 +16,7 @@ def __f(
     global best_items
     global comparison_count
     
-    fractional_result = linprog(c, A_ub, b_ub, A_eq, b_eq, bounds=(0, 1))
+    fractional_result = linprog(c, A_ub, b_ub, A_eq, b_eq, bounds=(0, 1), method='simplex')
     optimum = -fractional_result['fun']
     items = [round(x, 3) for x in fractional_result['x']]
 
@@ -31,10 +31,10 @@ def __f(
             _A_eq = A_eq.copy()
             _b_eq = b_eq.copy()
 
-            _A_eq.append([0 for x in range(len(items) + 1)])
+            _A_eq.append([0 for _ in range(len(items))])
             _A_eq[-1][i] = 1
 
-            _b_eq[-1] = 1
+            _b_eq += [1]
             __f(c, A_ub, b_ub, _A_eq, _b_eq, best_optimum)
             
             _b_eq[-1] = 0
@@ -54,6 +54,7 @@ def solve(
     items_weights: List[int], 
     items_cost: List[int]
 ) -> Tuple[int, int, List[int], int]:
+    global comparison_count
 
     c = [-x for x in items_cost]
     A_ub = [items_weights]
