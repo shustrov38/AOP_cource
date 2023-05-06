@@ -4,9 +4,11 @@ import algorithms.weights_dp as weights_dp
 import algorithms.cost_dp as cost_dp
 import algorithms.approx2 as approx2
 import algorithms.lp as lp
+import algorithms.fptas as fptas
 
 
 BENCHMARKS_PATH = Path('./lab_2') / 'benchmarks'
+
 
 def benchmark(module, name: str, iters: int = 100) -> None:
     """
@@ -35,11 +37,10 @@ def benchmark(module, name: str, iters: int = 100) -> None:
     print(capacity, weights, cost, optimal)
     print('------------------------------')
 
-
     time_sum = 0
     for _ in range(iters):
         start_time = time.monotonic()
-        ans, res_weights, res_items, comparisons = module.solve(
+        res_cost, res_weight, res_items, comparisons = module.solve(
             capacity, weights, cost)
         end_time = time.monotonic()
         time_sum += end_time - start_time
@@ -50,8 +51,8 @@ def benchmark(module, name: str, iters: int = 100) -> None:
 
 if __name__ == '__main__':
 
-    modules = [weights_dp, cost_dp, approx2, lp]
-    benchmark_names = ['p01', 'p02', 'p03', 'p04', 'p05', 'p06']
+    modules = [weights_dp, cost_dp, approx2, lp, fptas]
+    benchmark_names = ['p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07']
 
     for module in modules:
         for benchmark_name in benchmark_names:
