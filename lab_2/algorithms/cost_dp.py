@@ -1,10 +1,11 @@
-from typing import List
-import scipy
+from typing import List, Tuple
 
-def solve(capacity: int, items_weights: List[int], items_cost: List[int]):
+def solve(capacity: int, items_weights: List[int], items_cost: List[int]) -> Tuple[int, int, list, int]:
     comparisons_count = 0
     items_size = len(items_cost)
     C = sum(items_cost)
+    result_weight = 0
+    items = [0 for i in range(items_size)]
     dp = []
     
     for i in range(items_size + 1):
@@ -18,10 +19,6 @@ def solve(capacity: int, items_weights: List[int], items_cost: List[int]):
                 dp[j][k] = dp[j - 1][k]
             else:
                 dp[j][k] = min(dp[j - 1][k], dp[j - 1][k - items_cost[j - 1]] + items_weights[j - 1])
-
-
-    items = [0 for i in range(items_size)]
-    result_weight = 0
 
     def get_items(k, s):
         nonlocal result_weight
