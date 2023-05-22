@@ -16,7 +16,7 @@ def __f(
     global best_items
     global comparison_count
     
-    fractional_result = linprog(c, A_ub, b_ub, A_eq, b_eq, bounds=(0, 1))
+    fractional_result = linprog(c, A_ub, b_ub, A_eq, b_eq, bounds=(0, 1), method='simplex')
     optimum = -fractional_result['fun']
     items = [round(x, 3) for x in fractional_result['x']]
 
