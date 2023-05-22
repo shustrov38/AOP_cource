@@ -1,4 +1,3 @@
-import random
 from typing import List, Tuple
 import numpy as np
 
@@ -6,8 +5,8 @@ MAGIC_NUMBER = 54
 
 
 def crossover_and_mutation_function(chroms: List[int], items_size: int, k: int) -> List[int]:
-    
-    crossover = random.randint(1, items_size - 1) // 2
+
+    crossover = np.randint(low=1, high=items_size - 1) // 2
     crossover *= 2
 
     for j in range(0, k, 2):
@@ -16,7 +15,7 @@ def crossover_and_mutation_function(chroms: List[int], items_size: int, k: int) 
 
     for j in range(items_size):
         for i in range(len(chroms[j])):
-            if random.randint(1, 100) == MAGIC_NUMBER:
+            if np.randint(low=1, high=100) == MAGIC_NUMBER:
                 chroms[j][i] = (chroms[j][i] + 1) % 2
 
     return chroms
@@ -29,7 +28,8 @@ def fitness_function(chroms: List[int], capacity: int, items_weights: List[int],
 
     while result_weights > capacity:
         nonzero_chrom = np.nonzero(chroms)[0]
-        chroms[nonzero_chrom[random.randint(0, len(nonzero_chrom) - 1)]] = 0
+        chroms[nonzero_chrom[np.randint(
+            low=0, high=len(nonzero_chrom) - 1)]] = 0
 
         result_weights = chroms * items_weights
         result_cost = chroms * items_cost
@@ -37,13 +37,13 @@ def fitness_function(chroms: List[int], capacity: int, items_weights: List[int],
     return result_cost
 
 
-def evolve(capacity: int, items_weights: List[int], items_cost: List[int], ):
+def evolve(capacity: int, items_weights: List[int], items_cost: List[int]):
 
     items_weights, items_cost = np.array(items_weights), np.array(items_cost)
     items_size = len(items_cost)
 
     chroms_size = 100
-    chroms = np.array([[random.randint(0, 1)
+    chroms = np.array([[np.randint(low=0, high=1)
                       for _ in range(items_size)] for _ in range(chroms_size)])
 
     k = chroms_size // 4
@@ -60,8 +60,8 @@ def evolve(capacity: int, items_weights: List[int], items_cost: List[int], ):
     for x in fitness_results:
         fitness_sum += x[1]
 
-    p = [x[0] / fitness_sum for x in fitness_results]
-    selected_chroms = random.choices(chroms, weights=p, k=k)
+    selected_chroms = np.choices(
+        a=chroms, p=[x[0] / fitness_sum for x in fitness_results], size=k)
 
     selected_chroms = crossover_and_mutation_function(
         selected_chroms, items_size, k)
