@@ -33,10 +33,6 @@ def benchmark(module, name: str, iters: int = 100) -> None:
         optimal = pattern_file.read()
         optimal = list(map(int, optimal.split()))
 
-    print('------------------------------')
-    print(capacity, weights, cost, optimal)
-    print('------------------------------')
-
     time_sum = 0
     for _ in range(iters):
         start_time = time.monotonic()
@@ -46,11 +42,10 @@ def benchmark(module, name: str, iters: int = 100) -> None:
         time_sum += end_time - start_time
     mean_time = time_sum / iters
 
-    print(name, module.__name__, res_items, comparisons, mean_time)
+    print(name, module.__name__, res_cost, res_weight, res_items, comparisons, mean_time)
 
 
 if __name__ == '__main__':
-
     modules = [weights_dp, cost_dp, approx2, lp, fptas]
     benchmark_names = ['p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07']
 
