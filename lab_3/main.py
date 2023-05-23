@@ -7,13 +7,14 @@ KNAPSACK_BENCHMARKS_PATH = Path('./lab_3') / 'benchmarks' / 'knapsack'
 TSP_BENCHMARKS_PATH = Path('./lab_3') / 'benchmarks' / 'TSP'
 
 
-def knapsack_benchmark(module, name: str, iters: int = 100) -> None:
+def knapsack_benchmark(name: str, iters: int = 100) -> None:
     """
     _c.txt - the knapsack capacity.
     _w.txt - the weights of the objects.
     _p.txt - the profits of each object.
     _s.txt - the optimal selection of weights.
     """
+    print("Knapsack evolution algorithm")
 
     with open(KNAPSACK_BENCHMARKS_PATH / (name + "_c.txt"), 'r', encoding='utf8') as text_file:
         capacity = int(text_file.read())
@@ -33,13 +34,13 @@ def knapsack_benchmark(module, name: str, iters: int = 100) -> None:
     time_sum = 0
     for _ in range(iters):
         start_time = time.monotonic()
-        res_cost, res_weight, res_items, comparisons = knapsack_genetic.evolve(
+        final_chroms, knapsack_result = knapsack_genetic.evolve(
             capacity, weights, cost)
         end_time = time.monotonic()
         time_sum += end_time - start_time
     mean_time = time_sum / iters
 
-    print(name, module.__name__, res_items, comparisons, mean_time)
+    print(name, final_chroms, knapsack_result, mean_time)
 
 
 if __name__ == '__main__':
