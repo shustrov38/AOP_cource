@@ -32,10 +32,12 @@ def knapsack_benchmark(name: str, iters: int = 100) -> None:
         optimal = list(map(int, optimal.split()))
         
     time_sum = 0
+    chroms_size = 100
+    
     for _ in range(iters):
         start_time = time.monotonic()
         final_chroms, knapsack_result = knapsack_genetic.evolve(
-            capacity, weights, cost)
+            capacity, weights, cost, chroms_size)
         end_time = time.monotonic()
         time_sum += end_time - start_time
     mean_time = time_sum / iters
