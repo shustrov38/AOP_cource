@@ -36,20 +36,19 @@ def knapsack_benchmark(name: str, iters: int = 100) -> None:
     
     for _ in range(iters):
         start_time = time.monotonic()
-        final_chroms, knapsack_result = knapsack_genetic.evolve(
+        iterration, final_chroms, knapsack_result = knapsack_genetic.evolve(
             capacity, weights, cost, chroms_size)
         end_time = time.monotonic()
         time_sum += end_time - start_time
     mean_time = time_sum / iters
 
-    print(name, final_chroms, knapsack_result, mean_time)
+    print(f"Bench: {name} Answer: {optimal} \nAlgorithm solve: iter - {iterration}, {final_chroms}, {knapsack_result}, {mean_time}\n")
 
 
 if __name__ == '__main__':
 
     knapsack_benchmark_names = ['p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07']
 
-    #benchmarks for knapsack
     for benchmark_name in knapsack_benchmark_names:
         knapsack_benchmark(benchmark_name)
     print()

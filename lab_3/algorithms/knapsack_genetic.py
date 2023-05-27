@@ -55,7 +55,7 @@ def fitness_function(chroms: List[int], capacity: int, items_weights: List[int],
     return result_cost
 
 
-def evolve(capacity: int, items_weights: List[int], items_cost: List[int], chroms_size: int = 100):
+def evolve(capacity: int, items_weights: List[int], items_cost: List[int], chroms_size: int = 100, epochs: int = 1):
 
     items_weights, items_cost = np.array(items_weights), np.array(items_cost)
     items_size = len(items_cost)
@@ -67,20 +67,28 @@ def evolve(capacity: int, items_weights: List[int], items_cost: List[int], chrom
     for idx_chrom in range(chroms_size):
         fitness_results.append((idx_chrom, fitness_function(chroms[idx_chrom], capacity,
                                                             items_weights, items_cost)))
-
+    best_ans = (0, fitness_results, chroms)
+    
     selected_chroms = selection_function(chroms, fitness_results)
 
     new_chroms = crossover_and_mutation_function(
         selected_chroms, items_size, len(selected_chroms))
     
-    new_fitness_results = []
-    for idx_chrom in range(len(new_chroms)):
-        new_fitness_results.append((idx_chrom, fitness_function(new_chroms[idx_chrom], capacity,
-                                                                items_weights, items_cost)))
+    
+    for iterration in range(epochs):
+        
+        new_fitness_results = []
+        for idx_chrom in range(len(new_chroms)):
+            new_fitness_results.append((idx_chrom, fitness_function(new_chroms[idx_chrom], capacity,
+                                                                    items_weights, items_cost)))
+            
+        if new_fitness_results[0][1] > best_ans[1][0][1]:
+            best_ans = (iterration, new_fitness_results, new_chroms)
 
-    new_fitness_results.sort(key=lambda x: x[1], reverse=True)
+        selected_chroms = selection_function(chroms, fitness_results)
 
-    if new_fitness_results[0][1] > fitness_results[0][1]:
-        return new_chroms[new_fitness_results[0][0]], new_fitness_results[0][1]
-    else:
-        return chroms[fitness_results[0][0]], fitness_results[0][1]
+        new_chroms = crossover_and_mutation_function(
+            selected_chroms, items_size, len(selected_chroms))
+            
+    return iterration, best_ans[2][best_ans[1][0][0]], best_ans[1][0][1]
+        
