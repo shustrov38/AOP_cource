@@ -51,7 +51,7 @@ def crossover_and_mutation_function(
             if chr1[j] in tmp1:
                 tmp1.remove(chr1[j])
 
-            o2[j] = chr1[j]
+            o2[j] = chr2[j]
             if chr2[j] in tmp2:
                 tmp2.remove(chr2[j])
 
@@ -77,12 +77,8 @@ def crossover_and_mutation_function(
     return chroms
 
 
-def evolve(edges_weight):
+def evolve(edges_weight: List[List[float]], chroms_size: int = 1000, epocs: int = 1):
     num_of_edges = len(edges_weight)
-    chroms_size = 1000
-    k = chroms_size // 4
-    k = k // 4
-    k *= 4
     
     temp = list(range(num_of_edges))
     chroms = []
@@ -96,13 +92,19 @@ def evolve(edges_weight):
     ]
     fitness_results.sort(key=lambda x: x[1])
 
-    selected_chroms = selection(fitness_results, chroms_size, k)
-    chroms = crossover_and_mutation_function(chroms, selected_chroms, num_of_edges)
+    for _ in range(epocs):
+        chroms_size = len(chroms)
+        k = chroms_size // 4
+        k = k // 4
+        k *= 4
 
-    fitness_results += [
-        (i, fitness_function(chroms[i], edges_weight)) 
-        for i in range(chroms_size, len(chroms))
-    ]
-    fitness_results.sort(key=lambda x: x[1])
+        selected_chroms = selection(fitness_results, chroms_size, k)
+        chroms = crossover_and_mutation_function(chroms, selected_chroms, num_of_edges)
 
-    return fitness_results[0][1], chroms[fitness_results[0][0]]
+        fitness_results += [
+            (i, fitness_function(chroms[i], edges_weight)) 
+            for i in range(chroms_size, len(chroms))
+        ]
+        fitness_results.sort(key=lambda x: x[1])
+
+    return fitness_results[0][1], [i + 1 for i in chroms[fitness_results[0][0]]]

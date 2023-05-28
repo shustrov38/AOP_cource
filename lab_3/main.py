@@ -67,19 +67,37 @@ def parse_coordinates(lines: List[str]) -> List[List[float]]:
     return edge_weights
 
 
-# def travelling_salesman_benchmark(name: str, iters: int = 100) -> None:
-#     pass
+def travelling_salesman_benchmark(edges_weights: List[List[float]], iters: int = 100) -> None:
+    answers = []
+    time_sum = 0
+    for _ in range(iters):
+        start_time = time.monotonic()
+        answer = travelling_salesman_genetic.evolve(edges_weights, epocs=50)
+        end_time = time.monotonic()
+        answers.append(answer)
+        time_sum += end_time - start_time
+    mean_time = time_sum / iters
+
+    print(f"Bench: {benchmark}")
+    print(f"time {mean_time}")
+    best_answer = min(list(map(lambda x: x[1], answers)))
+    print(f'answer: {best_answer}')
+    for i in answers:
+        if i[1] == best_answer:
+            print(f'path: {i[0]}')
+            break
+    print()
+
 
 
 if __name__ == '__main__':
 
     knapsack_benchmark_names = ['p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07']
-    travelling_salesman_benchmark_names = []
 
-    #benchmarks for knapsack
-    # for benchmark_name in knapsack_benchmark_names:
-    #     knapsack_benchmark(benchmark_name)
-    # print()
+    for benchmark_name in knapsack_benchmark_names:
+        knapsack_benchmark(benchmark_name)
+     
+    print()
 
     salesman_benchmarks = {
         'a280': (open(f'{TSP_BENCHMARKS_PATH}/a280.tsp', 'r').readlines()[6:-1], parse_coordinates),
@@ -91,21 +109,6 @@ if __name__ == '__main__':
     }
 
     for benchmark in salesman_benchmarks:
-        lines, method = salesman_benchmarks[benchmark]
-        w = method(lines)
-        answers = []
-        timeExecuted = 0
-        for i in range(1000):
-            start = time.time()
-            answer = travelling_salesman_genetic.evolve(w)
-            timeExecuted += time.time() - start
-            answers.append(answer)
-
-        print(f"BENCHMARK {benchmark}")
-        print(f"TIME {timeExecuted/1000}")
-        bestResult = min(list(map(lambda x: x[1], answers)))
-        print(f'BEST RESULT: {bestResult}')
-        for i in answers:
-            if i[1] == bestResult:
-                print(f'PATH: {i[0]}')
-                break
+        lines, parser = salesman_benchmarks[benchmark]
+        edges_weights = parser(lines)
+        travelling_salesman_benchmark(edges_weights, iters=3)
