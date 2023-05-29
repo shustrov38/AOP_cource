@@ -1,4 +1,5 @@
 import time
+import numpy as np
 from pathlib import Path
 import algorithms.local_search as local_search
 
@@ -20,7 +21,7 @@ def read_file(name):
         for idx in range(n + 1, 2 * n + 1):
             flows.append(list(map(int, bench_data[idx + 1].split())))
     
-    return distances, flows
+    return np.array(distances), np.array(flows)
 
 
 def benchmark(name: str, iters: int = 100) -> None:
@@ -28,14 +29,18 @@ def benchmark(name: str, iters: int = 100) -> None:
     distance, flows = read_file(name)
     time_sum = 0
 
+    results = []
     for _ in range(iters):
         start_time = time.monotonic()
-        _, _ = local_search.solve(distance, flows)
+        current_ans, current_summuary_dist = local_search.solve(distance, flows)
+        results.append((current_ans, current_summuary_dist))
         end_time = time.monotonic()
         time_sum += end_time - start_time
     mean_time = time_sum / iters
 
-    print(f"Bench: {name}\n")
+    final_ans, final_summary_dist = sorted(results, key=lambda t: t[0])[0]
+    
+    print(f"Bench: {name}\n Ans: {final_ans.tolist()}\n Summary distance: {final_summary_dist}\n Time: {mean_time}\n")
 
 
 if __name__ == '__main__':
