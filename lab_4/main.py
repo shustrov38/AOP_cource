@@ -5,7 +5,7 @@ import algorithms.local_search as local_search
 
 
 BENCHMARKS_PATH = Path('./lab_4') / 'benchmarks'
-
+BENCHMARKS_LS_ANSWERS_PATH = Path('./lab_4') / 'bench_ls_answers'
 
 def read_file(name):
     
@@ -40,6 +40,9 @@ def benchmark(name: str, iters: int = 100) -> None:
     final_ans, final_summary_dist = sorted(results, key=lambda t: t[1])[0]
     
     print(f"Bench: {name}\n Ans: {final_ans.tolist()}\n Summary distance: {final_summary_dist}\n Time: {mean_time}\n")
+
+    with open(BENCHMARKS_LS_ANSWERS_PATH / f'{name}.sol', 'w') as file:
+        print(' '.join(list(map(str, final_ans.tolist()))), file=file)
 
 
 if __name__ == '__main__':
