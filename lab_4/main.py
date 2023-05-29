@@ -32,13 +32,12 @@ def benchmark(name: str, iters: int = 100) -> None:
     results = []
     for _ in range(iters):
         start_time = time.monotonic()
-        current_ans, current_summuary_dist = local_search.solve(distance, flows)
-        results.append((current_ans, current_summuary_dist))
+        results.append((local_search.solve(distance, flows)))
         end_time = time.monotonic()
         time_sum += end_time - start_time
     mean_time = time_sum / iters
 
-    final_ans, final_summary_dist = sorted(results, key=lambda t: t[0])[0]
+    final_ans, final_summary_dist = sorted(results, key=lambda t: t[1])[0]
     
     print(f"Bench: {name}\n Ans: {final_ans.tolist()}\n Summary distance: {final_summary_dist}\n Time: {mean_time}\n")
 

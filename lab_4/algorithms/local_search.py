@@ -1,49 +1,60 @@
 import numpy as np
 
 
-def generate_answer(distances, flows, ans):
+
+def compute_summary_dist(distances, flows, current_ans):
 
     summuary_dist = 0
     for idx in range(len(distances)):
-        summuary_dist += sum(distances[idx] * flows[ans[idx], ans])
+        summuary_dist += np.sum(distances[idx] * flows[current_ans[idx], current_ans])
 
     return summuary_dist
 
 
-def local_search(distances, flows, current_ans):
+def swap_and_compute_summary_dist(distances, flows, current_ans, u, v, current_summary_dist):
 
-    current_summary_dist = generate_answer(distances, flows, current_ans)
-    dont_look_bits = np.zeros(len(distances))
+    current_summary_dist -= (np.sum(distances[u] * flows[current_ans[u], current_ans]) + 
+                             np.sum(distances[v] * flows[current_ans[v], current_ans]))
+
+    current_ans[u], current_ans[v] = current_ans[v], current_ans[u]
+
+    current_summary_dist += (np.sum(distances[u] * flows[current_ans[u], current_ans]) + 
+                             np.sum(distances[v] * flows[current_ans[v], current_ans]))
+
+    return current_ans, current_summary_dist
+
+
+def local_search(distances, flows, current_ans):
+    
+    n = len(distances)
+    current_summary_dist = compute_summary_dist(distances, flows, current_ans)
+    dont_look_bits = np.zeros(n)
 
     u = 0
-    while u < len(distances):
-
+    while u < n:
         if dont_look_bits[u] == 1:
             u += 1
             continue
 
-        improve_summary_dist = False
-        for v in range(u + 1, len(distances)):
-            
-            new_ans = current_ans.copy()
-            new_summuary_dist = current_summary_dist.copy()
-            new_ans[u], new_ans[v] = new_ans[v], new_ans[u]
-            
-            new_summuary_dist += sum(distances[u] * flows[new_ans[u]]) - sum(distances[u] * flows[new_ans[v]])
-            new_summuary_dist += sum(distances[v] * flows[new_ans[v]]) - sum(distances[v] * flows[new_ans[u]])
-    
-            if new_summuary_dist < current_summary_dist:
+        improved_ans = False
+        for v in range(u + 1, n):
+
+            new_ans, new_summary_dist = swap_and_compute_summary_dist(
+                distances, flows, current_ans.copy(), u, v, current_summary_dist)
+
+            if new_summary_dist < current_summary_dist:
                 current_ans = new_ans
-                current_summary_dist = new_summuary_dist
-                improve_summary_dist = True
+                current_summary_dist = new_summary_dist
+                improved_ans = True
                 u = 0
                 break
 
-        if not improve_summary_dist:
+        if not improved_ans:
             dont_look_bits[u] = 1
+
         u += 1
 
-    return current_summary_dist, current_ans
+    return current_ans, current_summary_dist
 
 
 def solve(distances, flows):
