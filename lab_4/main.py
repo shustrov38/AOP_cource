@@ -5,7 +5,7 @@ import algorithms.local_search as local_search
 
 
 BENCHMARKS_PATH = Path('./lab_4') / 'benchmarks'
-BENCHMARKS_LS_ANSWERS_PATH = Path('./lab_4') / 'bench_ls_answers'
+BENCHMARKS_LS_ANSWERS_PATH = Path('./lab_4') / 'local_search_answers'
 
 def read_file(name):
     
