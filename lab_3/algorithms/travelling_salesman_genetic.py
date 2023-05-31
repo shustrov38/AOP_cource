@@ -95,8 +95,7 @@ def evolve(edges_weight: List[List[float]], chroms_size: int = 1000, epocs: int 
     for _ in range(epocs):
         chroms_size = len(chroms)
         k = chroms_size // 4
-        k = k // 4
-        k *= 4
+        k -= k % 3
 
         selected_chroms = selection(fitness_results, chroms_size, k)
         chroms = crossover_and_mutation_function(chroms, selected_chroms, num_of_edges)
