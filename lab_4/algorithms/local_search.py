@@ -58,7 +58,6 @@ def local_search(distances, flows, current_ans):
 
 
 def solve(distances, flows):
-
     initial_ans = np.arange(len(distances))
     np.random.shuffle(initial_ans)
 
