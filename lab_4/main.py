@@ -53,5 +53,5 @@ if __name__ == '__main__':
     
     for module in modules:
         for benchmark_name in benchmark_names:
-            benchmark(module, benchmark_name)
+            benchmark(module, benchmark_name, iters=10)
         print()
