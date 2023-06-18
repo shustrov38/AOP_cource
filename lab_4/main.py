@@ -42,7 +42,7 @@ def benchmark(module, name: str, iters: int = 100) -> None:
     
     print(f"Bench: {name}\n Ans: {final_ans}\n Summary distance: {final_summary_dist}\n Time: {mean_time}\n")
 
-    with open(BENCHMARKS_LS_ANSWERS_PATH / f'{name}.sol', 'a+') as file:
+    with open(BENCHMARKS_LS_ANSWERS_PATH / f'{module.name}_{name}.sol', 'a+') as file:
         print(' '.join(list(map(str, final_ans))), file=file)
 
 

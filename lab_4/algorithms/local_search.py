@@ -1,5 +1,6 @@
 import numpy as np
 
+name = 'LS'
 
 
 def compute_summary_dist(distances, flows, current_ans):

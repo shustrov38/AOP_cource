@@ -2,6 +2,8 @@ import random
 from typing import List
 from .local_search import local_search
 
+name = 'ILS'
+
 
 def stochastic_two_opt(ans: List[int], i: int, j: int):
     if i == 0:
